@@ -4,7 +4,10 @@ addSbtPlugin("com.github.sbt" % "sbt2-compat" % "0.1.0")
 
 name := "sbt-github-packages"
 
-version := "0.5.6"
+version := "0.5.7-SNAPSHOT"
+isSnapshot := {
+  version.value.endsWith("-SNAPSHOT")
+}
 versionScheme := Some("semver-spec")
 
 organization := "io.github.tayvs"
