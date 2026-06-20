@@ -51,7 +51,5 @@ publishTo := {
   else localStaging.value
 }
 
-credentials += Credentials(Path.userHome / ".sbt" / "sonatype_central_credentials")
-
 scriptedLaunchOpts ++= Seq("-Dplugin.version=" + version.value)
 scriptedBufferLog := true
