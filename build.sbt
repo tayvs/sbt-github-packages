@@ -1,43 +1,57 @@
-/*
- * Copyright 2019 Daniel Spiewak
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
+enablePlugins(SbtPlugin)
+addSbtPlugin("com.github.sbt" % "sbt2-compat" % "0.1.0")
 
 name := "sbt-github-packages"
 
-ThisBuild / baseVersion := "0.5"
+version := "0.5.6"
+versionScheme := Some("semver-spec")
 
-ThisBuild / organization := "com.codecommit"
-ThisBuild / publishGithubUser := "djspiewak"
-ThisBuild / publishFullName := "Daniel Spiewak"
+organization := "io.github.tayvs"
+licenses := List(License.Apache2)
 
-ThisBuild / sbtPlugin := true
-ThisBuild / sbtVersion := "1.3.3"
+sbtPlugin := true
 
-enablePlugins(SbtPlugin)
+val scala212 = "2.12.19"
+val scala3 = "3.8.4"
 
-homepage := Some(url("https://github.com/djspiewak/sbt-github-packages"))
+scalaVersion := scala3
+crossScalaVersions := Seq(scala212, scala3)
+
+
+(pluginCrossBuild / sbtVersion) := {
+  scalaBinaryVersion.value match {
+    case "2.12" => "1.12.12"
+    case _      => "2.0.0"
+  }
+}
+scriptedSbt := {
+  scalaBinaryVersion.value match {
+    case "2.12" => "1.12.12"
+    case _      => "2.0.0"
+  }
+}
+
+homepage := Some(url("https://github.com/tayvs/sbt-github-packages"))
 
 scmInfo := Some(
   ScmInfo(
-    url("https://github.com/djspiewak/sbt-github-packages"),
-    "scm:git@github.com:djspiewak/sbt-github-packages.git"))
+    url("https://github.com/tayvs/sbt-github-packages"),
+    "scm:git@github.com:tayvs/sbt-github-packages.git"))
 
 developers := List(
-  Developer(id="djspiewak", name="Daniel Spiewak", email="djspiewak@gmail.com", url=url("https://github.com/djspiewak")))
+  Developer(id="tayvs", name="Sviat Stoliarenko", email="@tayvs", url=url("https://github.com/tayvs")))
 
+pomIncludeRepository := { _ => false }
 publishMavenStyle := true
+
+publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if (isSnapshot.value) Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
+
+credentials += Credentials(Path.userHome / ".sbt" / "sonatype_central_credentials")
 
 scriptedLaunchOpts ++= Seq("-Dplugin.version=" + version.value)
 scriptedBufferLog := true

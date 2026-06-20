@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Daniel Spiewak
+ * Copyright 2021 Sviat Stoliarenko
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@
 package sbtghpackages
 
 import sbt._, Keys._
+import sbtcompat.PluginCompat.*
 
 import scala.sys.process._
 import scala.util.Try
 
 object GitHubPackagesPlugin extends AutoPlugin {
   @volatile
-  private[this] var alreadyWarned = false
+  private var alreadyWarned = false
 
   override def requires = plugins.JvmPlugin
   override def trigger = allRequirements
@@ -45,7 +46,7 @@ object GitHubPackagesPlugin extends AutoPlugin {
 
     credentials += {
       val src = githubTokenSource.value
-      inferredGitHubCredentials("_", src) match {   // user is ignored by GitHub, so just use "_"
+      inferredGitHubCredentials("_", src) match { // user is ignored by GitHub, so just use "_"
         case Some(creds) =>
           creds
 
@@ -55,7 +56,7 @@ object GitHubPackagesPlugin extends AutoPlugin {
     })
 
   val packagePublishSettings = Seq(
-    githubPublishTo := {
+    githubPublishTo := Def.uncached {
       val log = streams.value.log
       val ms = publishMavenStyle.value
       val back = for {
