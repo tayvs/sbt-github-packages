@@ -21,13 +21,13 @@ crossScalaVersions := Seq(scala212, scala3)
 
 (pluginCrossBuild / sbtVersion) := {
   scalaBinaryVersion.value match {
-    case "2.12" => "1.12.12"
+    case "2.12" => "1.9.9"
     case _      => "2.0.0"
   }
 }
 scriptedSbt := {
   scalaBinaryVersion.value match {
-    case "2.12" => "1.12.12"
+    case "2.12" => "1.9.9" // the tests are running on java 21
     case _      => "2.0.0"
   }
 }
