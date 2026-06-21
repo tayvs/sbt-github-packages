@@ -2,10 +2,10 @@ import scala.sys.process._
 
 val ArtifactId = "sbt-github-packages-tests-publish"
 
-ThisBuild / organization := "com.codecommit"
+ThisBuild / organization := "io.github.tayvs"
 ThisBuild / version := s"${sys.props("plugin.version")}"
 
-ThisBuild / githubOwner := "djspiewak"
+ThisBuild / githubOwner := "tayvs"
 ThisBuild / githubRepository := "sbt-github-packages"
 ThisBuild / githubTokenSource := TokenSource.Environment("GITHUB_TOKEN")
 
@@ -18,4 +18,4 @@ lazy val publisher = project
 lazy val resolver = project
   .in(file("resolver"))
   .settings(
-    libraryDependencies += "com.codecommit" %% ArtifactId % version.value)
+    libraryDependencies += "io.github.tayvs" %% ArtifactId % version.value)
